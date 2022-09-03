@@ -164,24 +164,31 @@ def create_app(test_config=None):
     only question that include that string within their question.
     Try using the word "title" to start.
     """
-    @app.route('/search',methods=['POST'])
+    # Search for questions
+    @app.route('/search', methods=['POST'])
     def find_question():
-        data = request.get_json() #extract data from the post
-        key_word = data.get('searchTerm')
-        questions = Question.query.filter(Question.question.ilike('%' \
-            +key_word + '%'
-            )).all()#used wildcard expression to search
-        q_count = len(questions)
-        if q_count>0:
-            paginated_questions = paginate(request,questions)
-            return jsonify({
-                'success':True,
-                'total_questions':q_count,
-                'questions':paginated_questions,
-                
-            })
+        body = request.get_json()
+        if body:
+            searchTerm = body.get('searchTerm', None)
         else:
-            abort(405) #one could use redirect here to go back to the original page
+            searchTerm ="Which"
+        try:
+            if searchTerm:
+                search = "%{}%".format(searchTerm)
+                questions = Question.query.filter(
+                    Question.question.ilike(search)).all()
+                current_questions = [question.format()
+                                        for question in questions]
+
+                return jsonify({
+                    'success': True,
+                    'questions': current_questions,
+                    'total_questions': len(current_questions),
+                })
+
+        except:
+            abort(405)
+
 
 
     """
