@@ -16,21 +16,22 @@ def create_app(test_config=None):
     setup_db(app)
 
     """
-    @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
+    @DONE: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
     """
     CORS(app, resources={r'*':{'origins':'*'}})
     """
-    @TODO: Use the after_request decorator to set Access-Control-Allow
+    @DONE: Use the after_request decorator to set Access-Control-Allow
     """
     # CORS Headers decorator
     @app.after_request
     def after_request(response): #must return the response object
         response.headers.add("Access-Control-Allow-Headers","Content-Type,Authorization,true")
-        response.headers.add('Access-Control-Allow-Headers','POST,PATCH,GET,DELETE,OPTIONS') #allowed methods from cross domains
+        #allowed methods from cross domains
+        response.headers.add('Access-Control-Allow-Headers','POST,PATCH,GET,DELETE,OPTIONS') 
         return response #must return this to the caller
 
     """
-    @TODO:
+    @DONE:
     Create an endpoint to handle GET requests
     for all available categories.
     """
@@ -52,11 +53,12 @@ def create_app(test_config=None):
         page = request.args.get('page',1,type=int)
         begin =(page -1)*QUESTIONS_PER_PAGE
         stop = begin + QUESTIONS_PER_PAGE
-        objects = [obj.format() for obj in results] #format the object into nice string representation
+        #format the object into nice string representation
+        objects = [obj.format() for obj in results] 
         return objects[begin:stop] #list slicing
 
     """
-    @TODO:
+    @DONE:
     Create an endpoint to handle GET requests for questions,
     including pagination (every 10 questions).
     This endpoint should return a list of questions,
@@ -68,13 +70,14 @@ def create_app(test_config=None):
     Clicking on the page numbers should update the questions.
     """
     @app.route('/questions',methods=['GET'])
-    def get_all_questions():
-        questions = Question.query.order_by(Question.id).all()#fetch and order questions in order of creation
+    def get_all_questions(): 
+        #fetch and order questions in order of creation
+        questions = Question.query.order_by(Question.id).all()
         ques_count =len(questions)
-        question = paginate(request,questions) #all formated questions
+        question = paginate(request,questions) 
         if len(question)==0:
             abort(404)#unauthorized action
-        for q in question:
+        for q in questions:
             current_category = q.category
             break
         categories = Category.query.all()
@@ -93,7 +96,7 @@ def create_app(test_config=None):
         
 
     """
-    @TODO:
+    @DONE:
     Create an endpoint to DELETE question using a question ID.
 
     TEST: When you click the trash icon next to a question, the question will be removed.
@@ -115,11 +118,11 @@ def create_app(test_config=None):
                 'message':'Question successfully deleted!'
             })
         except Exception as e:
-            abort(403) #action forbidden
+            abort(422) #action forbidden
     
 
     """
-    @TODO:
+    @DONE:
     Create an endpoint to POST a new question,
     which will require the question and answer text,
     category, and difficulty score.
@@ -152,7 +155,7 @@ def create_app(test_config=None):
         except Exception as e:
             abort(403) #not allowed
     """
-    @TODO:
+    @DONE:
     Create a POST endpoint to get questions based on a search term.
     It should return any questions for whom the search term
     is a substring of the question.
@@ -182,7 +185,7 @@ def create_app(test_config=None):
 
 
     """
-    @TODO:
+    @DONE:
     Create a GET endpoint to get questions based on category.
 
     TEST: In the "List" tab / main screen, clicking on one of the
@@ -211,7 +214,7 @@ def create_app(test_config=None):
 
 
     """
-    @TODO:
+    @DONE:
     Create a POST endpoint to get questions to play the quiz.
     This endpoint should take category and previous question parameters
     and return a random questions within the given category,
@@ -257,13 +260,9 @@ def create_app(test_config=None):
         except Exception as e:
             abort(404)
 
-        
-        
-
-
 
     """
-    @TODO:
+    @DONE:
     Create error handlers for all expected errors
     including 404 and 422.
     """

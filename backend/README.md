@@ -90,9 +90,53 @@ You will need to provide detailed documentation of your API endpoints including 
 }
 ```
 
+`GET '/api/v1.0/questions'`
+- Fetches a dictionary of all questions and the categories to which 
+the questions belong.
+- Request Arguments: None
+- Returns: An object with keys `questions`,`total_questions`,`categories` and their values.
+
+`GET` `/api/v1.0/questions/?id=value`
+- Deletes a question whose id is value
+- Request Arguments: `id` - the id of the question to delete
+- Returns: a dictionary with key `message`,`deleted` and values 
+`success message to the user` and `id of deleted item`
+
+`POST` `api/v1.0/questions`
+- Creates a new question object and persists it to database
+- Request Arguments: Json object with keys `question`,`answer`,`difficulty`, `category` and values being the respective data.
+-Returns: A dictionary of all questions in the database and the
+count of the number of questions in the database
+
+`POST` `api/v1.0/search`
+- Fetches for questions containing a specified keyword 
+- Request Arguments: `searchTerm` which is the string to search for
+- Returns: Adictionary containing keys `total_questions`,`questions` 
+and their respective values
+
+`GET` `api/v1.0/categories/?category_id=value`
+- Fetches questions belonging to a particular category from the database
+- Request Arguments: `category_id` the id of the category of interest
+- Returns: A dictionary containg keys `questions`,`total_questions`,
+`current_category` containing the respective data
+
+`POST` `api/v1.0/quizzes`
+
+- Creates a new quiz and saves in in the database
+- Request Arguments: None
+- Returns: a dictionary contaiing key `question` whose 
+value is a collection of all questions in the database 
+
+
+
+
+
+
 ## Testing
 
 Write at least one test for the success and at least one error behavior of each endpoint using the unittest library.
+
+- Tests accomplished in the test_flaskr.py file. 
 
 To deploy the tests, run
 
